@@ -387,7 +387,41 @@ function setup() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     startBtn = document.getElementById('startBtn');
-    // Precarga sonidos
+
+    // Detectar si es un dispositivo móvil
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // Si es móvil, no cargar ni reproducir sonidos
+        explosionAudio = null;
+        particulasAudio = null;
+        // Mostrar el botón al inicio
+        if (startBtn) startBtn.style.display = 'flex';
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                startBtn.style.display = 'none';
+                animRunning = true;
+                runAltFireworks();
+            });
+        }
+        // Mostrar aviso opcional
+        const aviso = document.createElement('div');
+        aviso.textContent = 'Nota: Los sonidos están desactivados en móviles.';
+        aviso.style.position = 'fixed';
+        aviso.style.bottom = '10px';
+        aviso.style.left = '50%';
+        aviso.style.transform = 'translateX(-50%)';
+        aviso.style.background = 'rgba(0,0,0,0.7)';
+        aviso.style.color = '#fff';
+        aviso.style.padding = '8px 16px';
+        aviso.style.borderRadius = '8px';
+        aviso.style.zIndex = 1000;
+        document.body.appendChild(aviso);
+        setTimeout(() => aviso.remove(), 4000);
+        return;
+    }
+
+    // Precarga sonidos (solo en escritorio)
     explosionAudio = new Audio('explosion.mp3');
     particulasAudio = new Audio('particulas.mp3');
     // Intenta desbloquear audio en móviles
