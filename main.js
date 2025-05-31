@@ -5,11 +5,6 @@ const colors = ['#FF69B4','#FFD700','#00FF00','#00BFFF','#FF4500','#ADFF2F','#FF
 let canvas, ctx, explosionAudio = null, particulasAudio = null, startBtn = null;
 let animRunning = false;
 
-// Detectar si es móvil
-function isMobile() {
-    return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
-}
-
 function randomColor() {
     return colors[Math.floor(Math.random() * colors.length)];
 }
@@ -35,59 +30,49 @@ function playParticulasSound() {
 function runAltFireworks() {
     // Variables y opciones del modo alternativo
     let c = canvas;
-    // Escala de resolución para móviles
-    let pixelRatio = 1;
-    if (isMobile()) pixelRatio = 0.5;
+    let w = c.width = window.innerWidth,
+        h = c.height = window.innerHeight,
+        ctx2 = c.getContext('2d'),
 
-    let w = c.width = Math.floor(window.innerWidth * pixelRatio),
-        h = c.height = Math.floor(window.innerHeight * pixelRatio),
-        ctx2 = c.getContext('2d');
-
-    // Escalar el canvas visualmente para que ocupe toda la pantalla
-    c.style.width = window.innerWidth + "px";
-    c.style.height = window.innerHeight + "px";
-    ctx2.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
-    ctx2.scale(pixelRatio, pixelRatio);
-
-    let hw = w / 2,
+        hw = w / 2,
         hh = h / 2,
 
         opts = {
             strings: [ 'HAPPY', 'BIRTHDAY!','MY LOVE' ],
-            charSize: isMobile() ? 22 : 30,
-            charSpacing: isMobile() ? 25 : 35,
-            lineHeight: isMobile() ? 30 : 40,
+            charSize: 30,
+            charSpacing: 35,
+            lineHeight: 40,
             cx: w / 2,
             cy: h / 2,
-            fireworkPrevPoints: 8,
-            fireworkBaseLineWidth: 4,
-            fireworkAddedLineWidth: 5,
-            fireworkSpawnTime: 120,
-            fireworkBaseReachTime: 20,
-            fireworkAddedReachTime: 15,
-            fireworkCircleBaseSize: isMobile() ? 12 : 20,
-            fireworkCircleAddedSize: isMobile() ? 6 : 10,
-            fireworkCircleBaseTime: 18,
-            fireworkCircleAddedTime: 12,
-            fireworkCircleFadeBaseTime: 7,
-            fireworkCircleFadeAddedTime: 3,
-            fireworkBaseShards: isMobile() ? 8 : 18, // Menos partículas en móvil
-            fireworkAddedShards: isMobile() ? 4 : 12,
-            fireworkShardPrevPoints: 2,
-            fireworkShardBaseVel: 3,
-            fireworkShardAddedVel: 1.5,
-            fireworkShardBaseSize: 2,
-            fireworkShardAddedSize: 2,
+            fireworkPrevPoints: 10,
+            fireworkBaseLineWidth: 5,
+            fireworkAddedLineWidth: 8,
+            fireworkSpawnTime: 200,
+            fireworkBaseReachTime: 30,
+            fireworkAddedReachTime: 30,
+            fireworkCircleBaseSize: 20,
+            fireworkCircleAddedSize: 10,
+            fireworkCircleBaseTime: 30,
+            fireworkCircleAddedTime: 30,
+            fireworkCircleFadeBaseTime: 10,
+            fireworkCircleFadeAddedTime: 5,
+            fireworkBaseShards: 18, // MÁS PARTICULAS
+            fireworkAddedShards: 12, // MÁS PARTICULAS
+            fireworkShardPrevPoints: 3,
+            fireworkShardBaseVel: 4,
+            fireworkShardAddedVel: 2,
+            fireworkShardBaseSize: 3,
+            fireworkShardAddedSize: 3,
             gravity: .1,
             upFlow: -.1,
-            letterContemplatingWaitTime: isMobile() ? 180 : 360,
-            balloonSpawnTime: 12,
-            balloonBaseInflateTime: 6,
-            balloonAddedInflateTime: 6,
-            balloonBaseSize: isMobile() ? 12 : 20,
-            balloonAddedSize: isMobile() ? 10 : 20,
-            balloonBaseVel: .3,
-            balloonAddedVel: .3,
+            letterContemplatingWaitTime: 360,
+            balloonSpawnTime: 20,
+            balloonBaseInflateTime: 10,
+            balloonAddedInflateTime: 10,
+            balloonBaseSize: 20,
+            balloonAddedSize: 20,
+            balloonBaseVel: .4,
+            balloonAddedVel: .4,
             balloonBaseRadian: -( Math.PI / 2 - .5 ),
             balloonAddedRadian: -1,
         },
@@ -389,15 +374,10 @@ function runAltFireworks() {
     anim();
 
     window.addEventListener( 'resize', function(){
-        // Recalcular dimensiones y escala en resize
-        let w = c.width = Math.floor(window.innerWidth * pixelRatio),
-            h = c.height = Math.floor(window.innerHeight * pixelRatio);
-        c.style.width = window.innerWidth + "px";
-        c.style.height = window.innerHeight + "px";
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
         hw = w / 2;
         hh = h / 2;
-        ctx2.setTransform(1, 0, 0, 1, 0, 0);
-        ctx2.scale(pixelRatio, pixelRatio);
         ctx2.font = opts.charSize + 'px Verdana';
     });
 }
